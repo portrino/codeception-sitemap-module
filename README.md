@@ -40,7 +40,7 @@ Update Codeception build
   
   $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
   
-  // validate all
+  // validate sitemap
   $I->seeResponseContainsValidSitemap();
   
 ```
