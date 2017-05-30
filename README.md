@@ -35,12 +35,29 @@ Update Codeception build
 ### Implement the cept / cest 
 
 ```php
-  $I->wantToTest('If sitemap is valid.');
-  $I->amOnPage('sitemap.xml');
-  
-  $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
-  
-  // validate sitemap
-  $I->seeResponseContainsValidSitemap();
+    $I->wantToTest('If sitemap is valid.');
+    
+    $I->amOnPage('sitemap_index.xml');
+    
+    // validation against https://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd
+    // sitemap will be retrieved from: http://<www.domain.tld>/sitemap.xml, where http://<www.domain.tld>/ is configured in module config
+    $I->seeSiteMapIsValid('sitemap.xml');
+    
+    // validation against https://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd
+    // siteindex will be retrieved from: http://<www.domain.tld>/sitemap_index.xml, where http://<www.domain.tld>/ is configured in module config
+    $I->seeSiteIndexIsValid('sitemap_index.xml');
+
+    // validate url occurence (also recursively through siteindex files!)
+    
+    // complete url
+    $I->seeSiteMapContainsUrl('sitemap_index.xml', 'https://www.domain.tld/foo/bar/');
+    
+    // without base_url (checks if one of the sitemap urls contains the path) 
+    $I->seeSiteMapContainsUrlPath('sitemap.xml', '/foo/bar');
+    
+    
+    // via response object
+    $I->seeSiteMapResponseContainsUrlPath('/bar/');
+    $I->seeSiteMapResponseContainsUrlPath('/foo/');
   
 ```

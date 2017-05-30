@@ -8,7 +8,8 @@
         }
     ],
     "require": {
-        "vipnytt/sitemapparser": "~1.0.3"
+        "vipnytt/sitemapparser": "~1.0.3",
+        "jasny/phpunit-xsdvalidation": "~1.0.1"
     },
     "autoload": {
         "psr-4": {
