@@ -68,14 +68,6 @@ EOF;
     }
 
     /**
-     * @return string
-     */
-    public function _conflicts()
-    {
-        return 'Codeception\Lib\Interfaces\API';
-    }
-
-    /**
      * @return array
      */
     public function _depends()
