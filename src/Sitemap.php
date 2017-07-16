@@ -22,7 +22,6 @@ class Sitemap extends Module implements DependsOnModule, API
 {
 
     protected $config = [
-        'apiKey' => '',
         'url' => ''
     ];
 
