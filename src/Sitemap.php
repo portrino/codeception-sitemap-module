@@ -18,7 +18,7 @@ use vipnytt\SitemapParser\Exceptions\SitemapParserException;
  * Class Sitemap
  * @package Codeception\Module
  */
-class Sitemap extends Module implements DependsOnModule, API
+class Sitemap extends Module implements DependsOnModule
 {
 
     protected $config = [
