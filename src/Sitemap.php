@@ -31,7 +31,7 @@ Example configuring PhpBrowser as backend for Sitemap module.
 --
 modules:
     enabled:
-        - Yandix:
+        - Sitemap:
             depends: PhpBrowser
             url: http://localhost/
 --
