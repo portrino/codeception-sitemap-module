@@ -105,13 +105,9 @@ EOF;
      */
     public function seeSiteMapIsValid($siteMapPath)
     {
-        $context = stream_context_create([
-            'http' => [
-                'header' => 'Accept: application/xml'
-            ]
-        ]);
         $siteMapUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteMapPath, '/');
-        $siteMap = file_get_contents($siteMapUrl, false, $context);
+        $this->connectionModule->headers['Accept'] = 'application/xml';
+        $siteMap = (string)$this->connectionModule->_request('GET', $siteMapUrl);
         $siteMapXml = simplexml_load_string($siteMap);
         $constraint = new XSDValidation(__DIR__ . '/../sitemap.xsd');
         \PHPUnit_Framework_Assert::assertThat($siteMapXml, $constraint);
@@ -122,13 +118,9 @@ EOF;
      */
     public function seeSiteIndexIsValid($siteIndexPath)
     {
-        $context = stream_context_create([
-            'http' => [
-                'header' => 'Accept: application/xml'
-            ]
-        ]);
         $siteIndexUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteIndexPath, '/');
-        $siteIndex = file_get_contents($siteIndexUrl, false, $context);
+        $this->connectionModule->headers['Accept'] = 'application/xml';
+        $siteIndex = (string)$this->connectionModule->_request('GET', $siteIndexUrl);
         $siteIndexXml = simplexml_load_string($siteIndex);
         $constraint = new XSDValidation(__DIR__ . '/../siteindex.xsd');
         \PHPUnit_Framework_Assert::assertThat($siteIndexXml, $constraint);
