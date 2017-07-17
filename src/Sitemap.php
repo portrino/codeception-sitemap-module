@@ -157,7 +157,7 @@ EOF;
         try {
             $siteMapUrl = rtrim($this->connectionModule->_getConfig()['url'], '/') .
                 $this->connectionModule->_getCurrentUri();
-            $parser = new SitemapParser();
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
 
             foreach ($parser->getURLs() as $actualUrl => $tags) {
@@ -181,7 +181,7 @@ EOF;
         try {
             $siteMapUrl = rtrim($this->connectionModule->_getConfig()['url'], '/') .
                 $this->connectionModule->_getCurrentUri();
-            $parser = new SitemapParser();
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
 
             foreach ($parser->getURLs() as $actualUrl => $tags) {
@@ -204,7 +204,7 @@ EOF;
         try {
             $siteMapUrl = rtrim($this->connectionModule->_getConfig()['url'], '/') .
                 $this->connectionModule->_getCurrentUri();
-            $parser = new SitemapParser();
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             return $parser->getURLs();
         } catch (SitemapParserException $e) {
@@ -218,8 +218,8 @@ EOF;
     public function grabUrlsFromSiteMap($siteMapPath)
     {
         try {
-            $parser = new SitemapParser();
             $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             return $parser->getURLs();
         } catch (SitemapParserException $e) {
@@ -235,8 +235,8 @@ EOF;
     {
         $result = false;
         try {
-            $parser = new SitemapParser();
             $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             foreach ($parser->getURLs() as $actualUrl => $tags) {
                 if ($actualUrl === $expectedUrl) {
@@ -258,8 +258,8 @@ EOF;
     {
         $result = false;
         try {
-            $parser = new SitemapParser();
             $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             foreach ($parser->getURLs() as $actualUrl => $tags) {
                 if (strpos($actualUrl, $expectedUrlPath) > 0) {
@@ -271,5 +271,15 @@ EOF;
         } catch (SitemapParserException $e) {
             throw new ConnectionException($e->getMessage());
         }
+    }
+
+    /**
+     * @return SitemapParser
+     */
+    protected function getSitemapParser()
+    {
+        $config = (array)$this->connectionModule->_getConfig('sitemapParser');
+        $parser = new SitemapParser(SitemapParser::DEFAULT_USER_AGENT, $config);
+        return $parser;
     }
 }

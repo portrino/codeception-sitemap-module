@@ -16,7 +16,7 @@ You can use this module as any other Codeception module, by adding 'Sitemap' to 
 
 ### Enable module and setup the configuration variables
 
-- The `url` could be set in config file directly or via an environment variable: `%BASE_URL%`
+The `url` could be set in config file directly or via an environment variable: `%BASE_URL%`
 
 ```yml
 modules:
@@ -25,6 +25,17 @@ modules:
             depends: PhpBrowser
             url: ADD_YOUR_BASE_URL_HERE
  ```  
+
+You could also configure the guzzle instance of the sitemap parser package. For example to disable SSL certification checks:  
+
+```yml
+modules:
+    enabled:
+      - Sitemap:
+          sitemapParser:
+            guzzle:
+              verify: false
+ ``` 
 
 Update Codeception build
   
