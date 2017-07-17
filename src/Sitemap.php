@@ -5,8 +5,6 @@ namespace Codeception\Module;
 use Codeception\Exception\ModuleException;
 use Codeception\Lib\Framework;
 use Codeception\Lib\InnerBrowser;
-use Codeception\Lib\Interfaces\API;
-use Codeception\Lib\Interfaces\ConflictsWithModule;
 use Codeception\Lib\Interfaces\DependsOnModule;
 use Codeception\Module;
 use Codeception\TestInterface;
