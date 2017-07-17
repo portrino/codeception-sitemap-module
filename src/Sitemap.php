@@ -2,6 +2,7 @@
 
 namespace Codeception\Module;
 
+use Codeception\Exception\ConnectionException;
 use Codeception\Exception\ModuleException;
 use Codeception\Lib\Framework;
 use Codeception\Lib\InnerBrowser;
@@ -167,7 +168,7 @@ EOF;
             }
             \PHPUnit_Framework_Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 
@@ -191,7 +192,7 @@ EOF;
             }
             \PHPUnit_Framework_Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 
@@ -207,7 +208,7 @@ EOF;
             $parser->parseRecursive($siteMapUrl);
             return $parser->getURLs();
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 
@@ -222,7 +223,7 @@ EOF;
             $parser->parseRecursive($siteMapUrl);
             return $parser->getURLs();
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 
@@ -245,7 +246,7 @@ EOF;
             }
             \PHPUnit_Framework_Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 
@@ -268,7 +269,7 @@ EOF;
             }
             \PHPUnit_Framework_Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 }
