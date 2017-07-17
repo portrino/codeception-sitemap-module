@@ -278,7 +278,7 @@ EOF;
      */
     protected function getSitemapParser()
     {
-        $config = (array)$this->connectionModule->_getConfig('sitemapParser');
+        $config = (array)$this->config['sitemapParser'];
         $parser = new SitemapParser(SitemapParser::DEFAULT_USER_AGENT, $config);
         return $parser;
     }
