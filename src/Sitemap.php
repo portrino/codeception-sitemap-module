@@ -8,6 +8,7 @@ use Codeception\Lib\InnerBrowser;
 use Codeception\Lib\Interfaces\DependsOnModule;
 use Codeception\Module;
 use Codeception\TestInterface;
+use Codeception\Util\Uri;
 use Jasny\PHPUnit\Constraint\XSDValidation;
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
@@ -105,7 +106,7 @@ EOF;
      */
     public function seeSiteMapIsValid($siteMapPath)
     {
-        $siteMapUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteMapPath, '/');
+        $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
         $this->connectionModule->headers['Accept'] = 'application/xml';
         $siteMap = (string)$this->connectionModule->_request('GET', $siteMapUrl);
         $siteMapXml = simplexml_load_string($siteMap);
@@ -118,7 +119,7 @@ EOF;
      */
     public function seeSiteIndexIsValid($siteIndexPath)
     {
-        $siteIndexUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteIndexPath, '/');
+        $siteIndexUrl = Uri::appendPath($this->config['url'], $siteIndexPath);
         $this->connectionModule->headers['Accept'] = 'application/xml';
         $siteIndex = (string)$this->connectionModule->_request('GET', $siteIndexUrl);
         $siteIndexXml = simplexml_load_string($siteIndex);
@@ -216,8 +217,8 @@ EOF;
     public function grabUrlsFromSiteMap($siteMapPath)
     {
         try {
-            $siteMapUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteMapPath, '/');
             $parser = new SitemapParser();
+            $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
             $parser->parseRecursive($siteMapUrl);
             return $parser->getURLs();
         } catch (SitemapParserException $e) {
@@ -233,8 +234,8 @@ EOF;
     {
         $result = false;
         try {
-            $siteMapUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteMapPath, '/');
             $parser = new SitemapParser();
+            $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
             $parser->parseRecursive($siteMapUrl);
             foreach ($parser->getURLs() as $actualUrl => $tags) {
                 if ($actualUrl === $expectedUrl) {
@@ -256,8 +257,8 @@ EOF;
     {
         $result = false;
         try {
-            $siteMapUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteMapPath, '/');
             $parser = new SitemapParser();
+            $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
             $parser->parseRecursive($siteMapUrl);
             foreach ($parser->getURLs() as $actualUrl => $tags) {
                 if (strpos($actualUrl, $expectedUrlPath) > 0) {
