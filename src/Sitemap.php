@@ -2,14 +2,14 @@
 
 namespace Codeception\Module;
 
+use Codeception\Exception\ConnectionException;
 use Codeception\Exception\ModuleException;
 use Codeception\Lib\Framework;
 use Codeception\Lib\InnerBrowser;
-use Codeception\Lib\Interfaces\API;
-use Codeception\Lib\Interfaces\ConflictsWithModule;
 use Codeception\Lib\Interfaces\DependsOnModule;
 use Codeception\Module;
 use Codeception\TestInterface;
+use Codeception\Util\Uri;
 use Jasny\PHPUnit\Constraint\XSDValidation;
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
@@ -18,11 +18,10 @@ use vipnytt\SitemapParser\Exceptions\SitemapParserException;
  * Class Sitemap
  * @package Codeception\Module
  */
-class Sitemap extends Module implements DependsOnModule, API
+class Sitemap extends Module implements DependsOnModule
 {
 
     protected $config = [
-        'apiKey' => '',
         'url' => ''
     ];
 
@@ -31,7 +30,7 @@ Example configuring PhpBrowser as backend for Sitemap module.
 --
 modules:
     enabled:
-        - Yandix:
+        - Sitemap:
             depends: PhpBrowser
             url: http://localhost/
 --
@@ -108,13 +107,9 @@ EOF;
      */
     public function seeSiteMapIsValid($siteMapPath)
     {
-        $context = stream_context_create([
-            'http' => [
-                'header' => 'Accept: application/xml'
-            ]
-        ]);
-        $siteMapUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteMapPath, '/');
-        $siteMap = file_get_contents($siteMapUrl, false, $context);
+        $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
+        $this->connectionModule->headers['Accept'] = 'application/xml';
+        $siteMap = (string)$this->connectionModule->_request('GET', $siteMapUrl);
         $siteMapXml = simplexml_load_string($siteMap);
         $constraint = new XSDValidation(__DIR__ . '/../sitemap.xsd');
         \PHPUnit_Framework_Assert::assertThat($siteMapXml, $constraint);
@@ -125,13 +120,9 @@ EOF;
      */
     public function seeSiteIndexIsValid($siteIndexPath)
     {
-        $context = stream_context_create([
-            'http' => [
-                'header' => 'Accept: application/xml'
-            ]
-        ]);
-        $siteIndexUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteIndexPath, '/');
-        $siteIndex = file_get_contents($siteIndexUrl, false, $context);
+        $siteIndexUrl = Uri::appendPath($this->config['url'], $siteIndexPath);
+        $this->connectionModule->headers['Accept'] = 'application/xml';
+        $siteIndex = (string)$this->connectionModule->_request('GET', $siteIndexUrl);
         $siteIndexXml = simplexml_load_string($siteIndex);
         $constraint = new XSDValidation(__DIR__ . '/../siteindex.xsd');
         \PHPUnit_Framework_Assert::assertThat($siteIndexXml, $constraint);
@@ -166,7 +157,7 @@ EOF;
         try {
             $siteMapUrl = rtrim($this->connectionModule->_getConfig()['url'], '/') .
                 $this->connectionModule->_getCurrentUri();
-            $parser = new SitemapParser();
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
 
             foreach ($parser->getURLs() as $actualUrl => $tags) {
@@ -177,7 +168,7 @@ EOF;
             }
             \PHPUnit_Framework_Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 
@@ -190,7 +181,7 @@ EOF;
         try {
             $siteMapUrl = rtrim($this->connectionModule->_getConfig()['url'], '/') .
                 $this->connectionModule->_getCurrentUri();
-            $parser = new SitemapParser();
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
 
             foreach ($parser->getURLs() as $actualUrl => $tags) {
@@ -201,7 +192,7 @@ EOF;
             }
             \PHPUnit_Framework_Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 
@@ -213,11 +204,11 @@ EOF;
         try {
             $siteMapUrl = rtrim($this->connectionModule->_getConfig()['url'], '/') .
                 $this->connectionModule->_getCurrentUri();
-            $parser = new SitemapParser();
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             return $parser->getURLs();
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 
@@ -227,12 +218,12 @@ EOF;
     public function grabUrlsFromSiteMap($siteMapPath)
     {
         try {
-            $siteMapUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteMapPath, '/');
-            $parser = new SitemapParser();
+            $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             return $parser->getURLs();
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 
@@ -244,8 +235,8 @@ EOF;
     {
         $result = false;
         try {
-            $siteMapUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteMapPath, '/');
-            $parser = new SitemapParser();
+            $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             foreach ($parser->getURLs() as $actualUrl => $tags) {
                 if ($actualUrl === $expectedUrl) {
@@ -255,7 +246,7 @@ EOF;
             }
             \PHPUnit_Framework_Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
     }
 
@@ -267,8 +258,8 @@ EOF;
     {
         $result = false;
         try {
-            $siteMapUrl = $this->connectionModule->_getConfig()['url'] . ltrim($siteMapPath, '/');
-            $parser = new SitemapParser();
+            $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
+            $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             foreach ($parser->getURLs() as $actualUrl => $tags) {
                 if (strpos($actualUrl, $expectedUrlPath) > 0) {
@@ -278,7 +269,17 @@ EOF;
             }
             \PHPUnit_Framework_Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
-            echo $e->getMessage();
+            throw new ConnectionException($e->getMessage());
         }
+    }
+
+    /**
+     * @return SitemapParser
+     */
+    protected function getSitemapParser()
+    {
+        $config = (array)$this->config['sitemapParser'];
+        $parser = new SitemapParser(SitemapParser::DEFAULT_USER_AGENT, $config);
+        return $parser;
     }
 }
