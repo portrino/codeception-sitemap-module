@@ -22,7 +22,8 @@ class Sitemap extends Module implements DependsOnModule
 {
 
     protected $config = [
-        'url' => ''
+        'url' => '',
+        'sitemapParser' => []
     ];
 
     protected $dependencyMessage = <<<EOF
@@ -33,6 +34,8 @@ modules:
         - Sitemap:
             depends: PhpBrowser
             url: http://localhost/
+            sitemapParser:
+                strict: 1
 --
 EOF;
 
