@@ -107,28 +107,71 @@ EOF;
 
     /**
      * @param string $siteMapPath
+     * @return string
+     */
+    protected function getUrl($siteMapPath)
+    {
+        return Uri::appendPath($this->config['url'], $siteMapPath);
+    }
+
+    /**
+     * @param string $sitemapUrl
+     * @return string
+     */
+    protected function getContentFromUrl($sitemapUrl)
+    {
+        $this->connectionModule->headers['Accept'] = 'application/xml';
+        return (string)$this->connectionModule->_request('GET', $sitemapUrl);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getContentFromResponse()
+    {
+        return $this->connectionModule->_getResponseContent();
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCurrentUrl()
+    {
+        return rtrim($this->connectionModule->_getConfig()['url'], '/') . $this->connectionModule->_getCurrentUri();
+    }
+
+    /**
+     * @param string $siteMapPath
      */
     public function seeSiteMapIsValid($siteMapPath)
     {
-        $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
-        $this->connectionModule->headers['Accept'] = 'application/xml';
-        $siteMap = (string)$this->connectionModule->_request('GET', $siteMapUrl);
+        $sitemapUrl = $this->getUrl($siteMapPath);
+        $siteMap = $this->getContentFromUrl($sitemapUrl);
+
         $siteMapXml = simplexml_load_string($siteMap);
         $constraint = new XSDValidation(__DIR__ . '/../sitemap.xsd');
         \PHPUnit_Framework_Assert::assertThat($siteMapXml, $constraint);
     }
 
     /**
-     * @param string $siteIndexPath
+     * @param string $sitemapIndexPath
      */
-    public function seeSiteIndexIsValid($siteIndexPath)
+    public function seeSiteIndexIsValid($sitemapIndexPath)
     {
-        $siteIndexUrl = Uri::appendPath($this->config['url'], $siteIndexPath);
-        $this->connectionModule->headers['Accept'] = 'application/xml';
-        $siteIndex = (string)$this->connectionModule->_request('GET', $siteIndexUrl);
-        $siteIndexXml = simplexml_load_string($siteIndex);
+        $sitemapIndexUrl = $this->getUrl($sitemapIndexPath);
+        $sitemapIndex = $this->getContentFromUrl($sitemapIndexUrl);
+
+        $siteIndexXml = simplexml_load_string($sitemapIndex);
         $constraint = new XSDValidation(__DIR__ . '/../siteindex.xsd');
         \PHPUnit_Framework_Assert::assertThat($siteIndexXml, $constraint);
+    }
+
+    /**
+     * @param string $sitemapIndexPath
+     */
+    public function seeSiteMapIndexIsValid($sitemapIndexPath)
+    {
+        $this->seeSiteIndexIsValid($sitemapIndexPath);
     }
 
     /**
@@ -136,7 +179,7 @@ EOF;
      */
     public function seeResponseContainsValidSiteIndex()
     {
-        $siteIndexXml = simplexml_load_string($this->connectionModule->_getResponseContent());
+        $siteIndexXml = simplexml_load_string($this->getContentFromResponse());
         $constraint = new XSDValidation(__DIR__ . '/../siteindex.xsd');
         \PHPUnit_Framework_Assert::assertThat($siteIndexXml, $constraint);
     }
@@ -146,7 +189,7 @@ EOF;
      */
     public function seeResponseContainsValidSiteMap()
     {
-        $siteMapXml = simplexml_load_string($this->connectionModule->_getResponseContent());
+        $siteMapXml = simplexml_load_string($this->getContentFromResponse());
         $constraint = new XSDValidation(__DIR__ . '/../sitemap.xsd');
         \PHPUnit_Framework_Assert::assertThat($siteMapXml, $constraint);
     }
@@ -157,12 +200,11 @@ EOF;
     public function seeSiteMapResponseContainsUrl($expectedUrl)
     {
         $result = false;
+
         try {
-            $siteMapUrl = rtrim($this->connectionModule->_getConfig()['url'], '/') .
-                $this->connectionModule->_getCurrentUri();
+            $siteMapUrl = $this->getCurrentUrl();
             $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
-
             foreach ($parser->getURLs() as $actualUrl => $tags) {
                 if ($actualUrl === $expectedUrl) {
                     $result = true;
@@ -182,11 +224,9 @@ EOF;
     {
         $result = false;
         try {
-            $siteMapUrl = rtrim($this->connectionModule->_getConfig()['url'], '/') .
-                $this->connectionModule->_getCurrentUri();
+            $siteMapUrl = $this->getCurrentUrl();
             $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
-
             foreach ($parser->getURLs() as $actualUrl => $tags) {
                 if (strpos($actualUrl, $expectedUrlPath) > 0) {
                     $result = true;
@@ -205,8 +245,7 @@ EOF;
     public function grabUrlsFromSiteMapResponse()
     {
         try {
-            $siteMapUrl = rtrim($this->connectionModule->_getConfig()['url'], '/') .
-                $this->connectionModule->_getCurrentUri();
+            $siteMapUrl = $this->getCurrentUrl();
             $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             return $parser->getURLs();
@@ -221,7 +260,7 @@ EOF;
     public function grabUrlsFromSiteMap($siteMapPath)
     {
         try {
-            $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
+            $siteMapUrl = $this->getUrl($siteMapPath);
             $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             return $parser->getURLs();
@@ -238,7 +277,7 @@ EOF;
     {
         $result = false;
         try {
-            $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
+            $siteMapUrl = $this->getUrl($siteMapPath);
             $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             foreach ($parser->getURLs() as $actualUrl => $tags) {
@@ -261,7 +300,7 @@ EOF;
     {
         $result = false;
         try {
-            $siteMapUrl = Uri::appendPath($this->config['url'], $siteMapPath);
+            $siteMapUrl = $this->getUrl($siteMapPath);
             $parser = $this->getSitemapParser();
             $parser->parseRecursive($siteMapUrl);
             foreach ($parser->getURLs() as $actualUrl => $tags) {
