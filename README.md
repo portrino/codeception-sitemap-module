@@ -1,8 +1,11 @@
 # Codeception Sitemap Module
 
+[![Build Status](https://travis-ci.org/portrino/codeception-sitemap-module.svg?branch=master)](https://travis-ci.org/portrino/codeception-sitemap-module)
 [![Code Climate](https://codeclimate.com/github/portrino/codeception-sitemap-module/badges/gpa.svg)](https://codeclimate.com/github/portrino/codeception-sitemap-module)
 [![Test Coverage](https://codeclimate.com/github/portrino/codeception-sitemap-module/badges/coverage.svg)](https://codeclimate.com/github/portrino/codeception-sitemap-module/coverage)
 [![Issue Count](https://codeclimate.com/github/portrino/codeception-sitemap-module/badges/issue_count.svg)](https://codeclimate.com/github/portrino/codeception-sitemap-module)
+[![Latest Stable Version](https://poser.pugx.org/portrino/codeception-sitemap-module/v/stable)](https://packagist.org/packages/portrino/codeception-sitemap-module)
+[![Total Downloads](https://poser.pugx.org/portrino/codeception-sitemap-module/downloads)](https://packagist.org/packages/portrino/codeception-sitemap-module)
 
 This package provides parsing and validation of sitemap.xml files
 
