@@ -10,7 +10,7 @@
     "require": {
         "codeception/codeception": "~2.3",
         "vipnytt/sitemapparser": "~1.0.3",
-        "jasny/phpunit-xsdvalidation": "1.1.0"
+        "portrino/phpunit-xsdvalidation": "1.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~6.4",
