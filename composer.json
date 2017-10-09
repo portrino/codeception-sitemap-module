@@ -24,7 +24,7 @@
     "repositories": [
         {
             "type": "git",
-            "url": "'https://github.com/portrino/phpunit-xsdvalidation.git
+            "url": "https://github.com/portrino/phpunit-xsdvalidation.git"
         }
     ],
     "config": {
