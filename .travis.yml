@@ -36,7 +36,7 @@ script:
   - >
     echo;
     echo "Running unit tests";
-    .Build/bin/phpunit --colors --coverage-clover build/logs/clover.xml
+    phpunit --colors --coverage-clover build/logs/clover.xml
 
   - >
     echo;
