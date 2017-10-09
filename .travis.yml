@@ -25,6 +25,9 @@ before_install:
   - composer self-update
   - composer --version
 
+install:
+  - composer install
+
 before_script:
   # Restore composer.json
   - git checkout composer.json
