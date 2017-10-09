@@ -36,12 +36,12 @@ script:
   - >
     echo;
     echo "Running unit tests";
-    phpunit --colors --coverage-clover build/logs/clover.xml
+    ./build/bin/phpunit --colors --coverage-clover build/logs/clover.xml
 
   - >
     echo;
     echo "Running PHP PSR-2 Coding Standards Checks";
-    build/bin/phpcs --standard=PSR2  --warning-severity=0 src/ tests/
+    ./build/bin/phpcs --standard=PSR2  --warning-severity=0 src/ tests/
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
