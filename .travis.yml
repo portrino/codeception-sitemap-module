@@ -1,0 +1,47 @@
+env:
+  global:
+      - CC_TEST_REPORTER_ID=ad0e86376d2db4d6c5f6d5f358308d44809b07057319a314dac2169671c6fedd
+
+language: php
+
+branches:
+  only:
+    - master
+    - /^[0-9]+\.[0-9]+$/
+    - /^[0-9]+\.[0-9]+\.[0-9]+$/
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+
+# list any PHP version you want to test against
+php:
+  - 7.0
+  - 7.1
+
+before_install:
+  - composer self-update
+  - composer --version
+
+before_script:
+  # Restore composer.json
+  - git checkout composer.json
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
+script:
+  - >
+    echo;
+    echo "Running unit tests";
+    .Build/bin/phpunit --colors --coverage-clover build/logs/clover.xml
+
+  - >
+    echo;
+    echo "Running PHP PSR-2 Coding Standards Checks";
+    .Build/bin/phpcs --standard=PSR2  --warning-severity=0 src/ tests/
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

@@ -1,5 +1,9 @@
 # Codeception Sitemap Module
 
+[![Code Climate](https://codeclimate.com/github/portrino/codeception-sitemap-module/badges/gpa.svg)](https://codeclimate.com/github/portrino/codeception-sitemap-module)
+[![Test Coverage](https://codeclimate.com/github/portrino/codeception-sitemap-module/badges/coverage.svg)](https://codeclimate.com/github/portrino/codeception-sitemap-module/coverage)
+[![Issue Count](https://codeclimate.com/github/portrino/codeception-sitemap-module/badges/issue_count.svg)](https://codeclimate.com/github/portrino/codeception-sitemap-module)
+
 This package provides parsing and validation of sitemap.xml files
 
 ## Installation
