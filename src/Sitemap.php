@@ -11,6 +11,7 @@ use Codeception\Module;
 use Codeception\TestInterface;
 use Codeception\Util\Uri;
 use Jasny\PHPUnit\Constraint\XSDValidation;
+use PHPUnit\Framework\Assert;
 use vipnytt\SitemapParser;
 use vipnytt\SitemapParser\Exceptions\SitemapParserException;
 
@@ -150,7 +151,7 @@ EOF;
 
         $siteMapXml = simplexml_load_string($siteMap);
         $constraint = new XSDValidation(__DIR__ . '/../sitemap.xsd');
-        \PHPUnit_Framework_Assert::assertThat($siteMapXml, $constraint);
+        Assert::assertThat($siteMapXml, $constraint);
     }
 
     /**
@@ -163,7 +164,7 @@ EOF;
 
         $siteIndexXml = simplexml_load_string($sitemapIndex);
         $constraint = new XSDValidation(__DIR__ . '/../siteindex.xsd');
-        \PHPUnit_Framework_Assert::assertThat($siteIndexXml, $constraint);
+        Assert::assertThat($siteIndexXml, $constraint);
     }
 
     /**
@@ -181,7 +182,7 @@ EOF;
     {
         $siteIndexXml = simplexml_load_string($this->getContentFromResponse());
         $constraint = new XSDValidation(__DIR__ . '/../siteindex.xsd');
-        \PHPUnit_Framework_Assert::assertThat($siteIndexXml, $constraint);
+        Assert::assertThat($siteIndexXml, $constraint);
     }
 
     /**
@@ -191,7 +192,7 @@ EOF;
     {
         $siteMapXml = simplexml_load_string($this->getContentFromResponse());
         $constraint = new XSDValidation(__DIR__ . '/../sitemap.xsd');
-        \PHPUnit_Framework_Assert::assertThat($siteMapXml, $constraint);
+        Assert::assertThat($siteMapXml, $constraint);
     }
 
     /**
@@ -211,7 +212,7 @@ EOF;
                     break;
                 }
             }
-            \PHPUnit_Framework_Assert::assertTrue($result);
+            Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
             throw new ConnectionException($e->getMessage());
         }
@@ -233,7 +234,7 @@ EOF;
                     break;
                 }
             }
-            \PHPUnit_Framework_Assert::assertTrue($result);
+            Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
             throw new ConnectionException($e->getMessage());
         }
@@ -286,7 +287,7 @@ EOF;
                     break;
                 }
             }
-            \PHPUnit_Framework_Assert::assertTrue($result);
+            Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
             throw new ConnectionException($e->getMessage());
         }
@@ -309,7 +310,7 @@ EOF;
                     break;
                 }
             }
-            \PHPUnit_Framework_Assert::assertTrue($result);
+            Assert::assertTrue($result);
         } catch (SitemapParserException $e) {
             throw new ConnectionException($e->getMessage());
         }

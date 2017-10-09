@@ -15,6 +15,7 @@ namespace Codeception\Module\Tests;
  */
 
 use Codeception\Module\Sitemap;
+use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use PHPUnit_Framework_TestCase;
 
@@ -22,7 +23,7 @@ use PHPUnit_Framework_TestCase;
  * Class SitemapTest
  * @package Codeception\Module\Tests
  */
-class SitemapTest extends PHPUnit_Framework_TestCase
+class SitemapTest extends TestCase
 {
     /**
      * @var Sitemap|PHPUnit_Framework_MockObject_MockObject
@@ -49,16 +50,15 @@ class SitemapTest extends PHPUnit_Framework_TestCase
     protected function runDefaultMockInitialization()
     {
         if ($this->sitemap === null) {
-            $this->sitemap = $this->getMock(
-                Sitemap::class,
-                [
-                    'getUrl',
-                    'getContentFromUrl'
-                ],
-                [],
-                '',
-                false
-            );
+            $this->sitemap = $this->getMockBuilder(Sitemap::class)
+                    ->setMethods(
+                        [
+                            'getUrl',
+                            'getContentFromUrl'
+                        ]
+                    )
+                    ->disableOriginalConstructor()
+                    ->getMock();
         }
 
         $this->sitemap
@@ -117,17 +117,17 @@ class SitemapTest extends PHPUnit_Framework_TestCase
      */
     public function seeResponseContainsValidSiteMap()
     {
-        $this->sitemap = $this->getMock(
-            Sitemap::class,
-            [
-                'getUrl',
-                'getContentFromUrl',
-                'getContentFromResponse'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->sitemap = $this->getMockBuilder(Sitemap::class)
+            ->setMethods(
+                [
+                    'getUrl',
+                    'getContentFromUrl',
+                    'getContentFromResponse'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->runDefaultMockInitialization();
         $this->sitemap
             ->expects(static::any())
@@ -142,17 +142,16 @@ class SitemapTest extends PHPUnit_Framework_TestCase
      */
     public function seeResponseContainsValidSiteIndex()
     {
-        $this->sitemap = $this->getMock(
-            Sitemap::class,
-            [
-                'getUrl',
-                'getContentFromUrl',
-                'getContentFromResponse'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->sitemap = $this->getMockBuilder(Sitemap::class)
+            ->setMethods(
+                [
+                    'getUrl',
+                    'getContentFromUrl',
+                    'getContentFromResponse'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->runDefaultMockInitialization();
         $this->sitemap
             ->expects(static::any())
@@ -167,17 +166,17 @@ class SitemapTest extends PHPUnit_Framework_TestCase
      */
     public function seeSiteMapResponseContainsUrl()
     {
-        $this->sitemap = $this->getMock(
-            Sitemap::class,
-            [
-                'getUrl',
-                'getContentFromUrl',
-                'getCurrentUrl'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->sitemap = $this->getMockBuilder(Sitemap::class)
+            ->setMethods(
+                [
+                    'getUrl',
+                    'getContentFromUrl',
+                    'getCurrentUrl'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->runDefaultMockInitialization();
         $this->sitemap
             ->expects(static::any())
@@ -194,17 +193,16 @@ class SitemapTest extends PHPUnit_Framework_TestCase
      */
     public function seeSiteMapResponseContainsUrlPath()
     {
-        $this->sitemap = $this->getMock(
-            Sitemap::class,
-            [
-                'getUrl',
-                'getContentFromUrl',
-                'getCurrentUrl'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->sitemap = $this->getMockBuilder(Sitemap::class)
+            ->setMethods(
+                [
+                    'getUrl',
+                    'getContentFromUrl',
+                    'getCurrentUrl'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->runDefaultMockInitialization();
         $this->sitemap
             ->expects(static::any())
@@ -221,17 +219,17 @@ class SitemapTest extends PHPUnit_Framework_TestCase
      */
     public function grabUrlsFromSiteMapResponse()
     {
-        $this->sitemap = $this->getMock(
-            Sitemap::class,
-            [
-                'getUrl',
-                'getContentFromUrl',
-                'getCurrentUrl'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->sitemap = $this->getMockBuilder(Sitemap::class)
+            ->setMethods(
+                [
+                    'getUrl',
+                    'getContentFromUrl',
+                    'getCurrentUrl'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->runDefaultMockInitialization();
         $this->sitemap
             ->expects(static::any())
@@ -252,18 +250,7 @@ class SitemapTest extends PHPUnit_Framework_TestCase
      */
     public function grabUrlsFromSiteMap()
     {
-        $this->sitemap = $this->getMock(
-            Sitemap::class,
-            [
-                'getUrl',
-                'getContentFromUrl'
-            ],
-            [],
-            '',
-            false
-        );
         $this->runDefaultMockInitialization();
-
         $urls = $this->sitemap->grabUrlsFromSiteMap(self::SITEMAP_EXAMPLE_PATH);
         self::assertEquals(5, count($urls));
 
@@ -278,16 +265,6 @@ class SitemapTest extends PHPUnit_Framework_TestCase
      */
     public function seeSiteMapContainsUrl()
     {
-        $this->sitemap = $this->getMock(
-            Sitemap::class,
-            [
-                'getUrl',
-                'getContentFromUrl'
-            ],
-            [],
-            '',
-            false
-        );
         $this->runDefaultMockInitialization();
 
         $this->sitemap->seeSiteMapContainsUrl(
@@ -301,16 +278,6 @@ class SitemapTest extends PHPUnit_Framework_TestCase
      */
     public function seeSiteMapContainsUrlPath()
     {
-        $this->sitemap = $this->getMock(
-            Sitemap::class,
-            [
-                'getUrl',
-                'getContentFromUrl'
-            ],
-            [],
-            '',
-            false
-        );
         $this->runDefaultMockInitialization();
 
         $this->sitemap->seeSiteMapContainsUrlPath(
