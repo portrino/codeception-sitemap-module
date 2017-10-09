@@ -106,10 +106,11 @@ class SitemapTest extends TestCase
     /**
      * @test
      */
-    public function seeSiteIndexIsValid()
+    public function seeSiteMapIndexIsValid()
     {
         $this->runDefaultMockInitialization();
         $this->sitemap->seeSiteIndexIsValid(self::SITEMAPINDEX_EXAMPLE_PATH);
+        $this->sitemap->seeSiteMapIndexIsValid(self::SITEMAPINDEX_EXAMPLE_PATH);
     }
 
     /**
