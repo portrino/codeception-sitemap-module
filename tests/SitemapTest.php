@@ -25,7 +25,7 @@ use PHPUnit_Framework_MockObject_MockObject;
 class SitemapTest extends TestCase
 {
     /**
-     * @var Sitemap|PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit_Framework_MockObject_MockObject|Sitemap
      */
     protected $sitemap;
 
