@@ -52,10 +52,11 @@ EOF;
     protected $connectionModule;
 
     public $params = [];
-    public $response = "";
+    public $response = '';
 
     /**
      * @param TestInterface $test
+     * @codeCoverageIgnore
      */
     public function _before(TestInterface $test)
     {
@@ -63,15 +64,19 @@ EOF;
         $this->resetVariables();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     protected function resetVariables()
     {
         $this->params = [];
-        $this->response = "";
+        $this->response = '';
         $this->connectionModule->headers = [];
     }
 
     /**
      * @return array
+     * @codeCoverageIgnore
      */
     public function _depends()
     {
@@ -80,6 +85,7 @@ EOF;
 
     /**
      * @param InnerBrowser $connection
+     * @codeCoverageIgnore
      */
     public function _inject(InnerBrowser $connection)
     {
@@ -97,11 +103,12 @@ EOF;
     /**
      * @return \Symfony\Component\BrowserKit\Client|\Symfony\Component\HttpKernel\Client
      * @throws ModuleException
+     * @codeCoverageIgnore
      */
     protected function getRunningClient()
     {
         if ($this->client->getInternalRequest() === null) {
-            throw new ModuleException($this, "Response is empty. Use `\$I->sendXXX()` methods to send HTTP request");
+            throw new ModuleException($this, 'Response is empty. Use `\$I->sendXXX()` methods to send HTTP request');
         }
         return $this->client;
     }
@@ -257,6 +264,7 @@ EOF;
 
     /**
      * @param string $siteMapPath
+     * @return array
      */
     public function grabUrlsFromSiteMap($siteMapPath)
     {

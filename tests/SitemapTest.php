@@ -24,10 +24,6 @@ use PHPUnit_Framework_MockObject_MockObject;
  */
 class SitemapTest extends TestCase
 {
-    /**
-     * @var PHPUnit_Framework_MockObject_MockObject|Sitemap
-     */
-    protected $sitemap;
 
     const SITEMAP_EXAMPLE_PATH = 'example_sitemap';
     const SITEMAPINDEX_EXAMPLE_PATH = 'example_siteindex';
@@ -35,6 +31,11 @@ class SitemapTest extends TestCase
         'https://raw.githubusercontent.com/portrino/codeception-sitemap-module/master/tests/fixtures/sitemap.xml';
     const SITEMAPINDEX_EXAMPLE_URL =
         'https://raw.githubusercontent.com/portrino/codeception-sitemap-module/master/tests/fixtures/sitemap_index.xml';
+
+    /**
+     * @var PHPUnit_Framework_MockObject_MockObject|Sitemap
+     */
+    protected $sitemap;
 
     /**
      * @var string
@@ -50,14 +51,14 @@ class SitemapTest extends TestCase
     {
         if ($this->sitemap === null) {
             $this->sitemap = $this->getMockBuilder(Sitemap::class)
-                    ->setMethods(
-                        [
-                            'getUrl',
-                            'getContentFromUrl'
-                        ]
-                    )
-                    ->disableOriginalConstructor()
-                    ->getMock();
+                ->setMethods(
+                    [
+                        'getUrl',
+                        'getContentFromUrl'
+                    ]
+                )
+                ->disableOriginalConstructor()
+                ->getMock();
         }
 
         $this->sitemap
