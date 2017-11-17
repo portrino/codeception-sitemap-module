@@ -79,3 +79,11 @@ Update Codeception build
     $I->seeSiteMapResponseContainsUrlPath('/foo/');
   
 ```
+
+## Authors
+
+![](https://avatars0.githubusercontent.com/u/726519?s=40&v=4)
+
+* **André Wuttig** - *Initial work, Unit Tests, Documentation* - [aWuttig](https://github.com/aWuttig)
+
+See also the list of [contributors](https://github.com/portrino/codeception-sitemap-module/graphs/contributors) who participated in this project.
